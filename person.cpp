@@ -39,7 +39,7 @@ Person::~Person()
 //}
 
 Person::Person(Person &&person) :
-    _firstName(person._firstName), _lastName(person._lastName), _age(person._age)
+    _firstName(std::move(person._firstName)), _lastName(std::move(person._lastName)), _age(std::move(person._age))
 {
     std::cout << "Person &&\n";
 }
@@ -50,9 +50,9 @@ Person &Person::operator =(Person &&person)
     if(&person == this)
         return *this;
 
-    _firstName = person._firstName;
-    _lastName = person._lastName;
-    _age = person._age;
+    _firstName = std::move(person._firstName);
+    _lastName = std::move(person._lastName);
+    _age = std::move(person._age);
 
     return *this;
 }

@@ -20,7 +20,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream &out, const Person &person)
     {
-        return out << person._firstName << " " << person._lastName << " " << person._age << std::endl;
+        return out << person._firstName << " " << person._lastName << " " << person._age;
     }
 
 private:
