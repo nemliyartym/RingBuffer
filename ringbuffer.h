@@ -20,11 +20,24 @@ public:
      * \brief push - вставка элемента в буфер
      * \param item - элемент
      */
-//    template <typename... Args>
-//    void emplace(Args&&... args)
-//    {
+    template <typename... Args>
+    void emplace(Args&&... args)
+    {
+        _buf[_tail] = std::make_pair(true,T(std::forward<Args>(args)...));
 
-//    }
+        _empty = false;
+        if (++_size > _capacity) {
+            _size = _capacity;
+        }
+
+        if (_full) {
+            _head = (_head +1) % _capacity;
+        }
+
+        _tail = (_tail + 1) %_capacity;
+
+        _full = _head == _tail;
+    }
 
     void push(T &&item)
     {
