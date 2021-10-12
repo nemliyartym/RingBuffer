@@ -76,37 +76,30 @@ public:
         return res;
     }
 
+    /*!
+     * \brief setCapacity устанавливает емкость буфера, если новая емкость будет больше чем текущий size буфера, то будут удаленны элменты с головы буфера
+     * \param newCapacity новая емкость буфера
+     */
     void setCapacity(const size_t newCapacity) {
 
         if (newCapacity == _capacity) return;
 
         std::unique_ptr<std::pair<bool,T>[]> tmpBuf = std::make_unique<std::pair<bool,T>[]>(newCapacity);
 
-        if (newCapacity >= _size) {
+        int offset = _size >= newCapacity ?  _size - newCapacity : 0;
 
-            for (size_t i = 0; i != _size; ++i) {
-                tmpBuf[i] = std::move(_buf[ (i + _head) % _capacity]);
-            }
-
-            _buf = std::move(tmpBuf);
-            _capacity = newCapacity;
-
-            _tail = _size % _capacity;
-            _head = 0;
-
-        } else {
-
-            for (size_t i = newCapacity; i != 0; --i) {
-                tmpBuf[i] = std::move(_buf[ (i - _tail) % _capacity]);
-            }
-
-            _buf = std::move(tmpBuf);
-            _capacity = newCapacity;
-
-            _tail = _size % _capacity;
-            _head = 0;
-
+        for (size_t i = 0; i != _size; ++i) {
+            tmpBuf[i] = std::move(_buf[ (i + _head + offset) % _capacity]);
         }
+
+        printBuff();
+
+        _buf = std::move(tmpBuf);
+
+        _size = offset != 0 ? newCapacity : _size;
+        _capacity = newCapacity;
+        _tail = _size % newCapacity;
+        _head = 0;
     }
 
     /*!
