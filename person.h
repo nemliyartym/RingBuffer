@@ -12,8 +12,8 @@ public:
 
     ~Person();
 
-    Person (const Person &person) = delete;
-    Person &operator =(Person &person) = delete;
+    Person (const Person &person);
+    Person &operator =(Person &person);
 
     Person (Person &&person);
     Person &operator = (Person &&person);
